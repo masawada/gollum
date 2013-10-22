@@ -6,7 +6,7 @@ module Precious
       return nil if file_path.nil?
       last_slash = file_path.rindex("/")
       if last_slash
-        file_path[0, last_slash]
+        URI.unescape(file_path[0, last_slash])
       end
     end
 
@@ -18,7 +18,7 @@ module Precious
 
       # File.basename is too eager to please and will return the last
       # component of the path even if it ends with a directory separator.
-      ::File.basename(file_path)
+      URI.unescape(::File.basename(file_path))
     end
 
     def sanitize_empty_params(param)

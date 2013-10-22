@@ -25,10 +25,8 @@ class String
     return nil if self.nil?
 #    upstream_to_url :exclude => ['_Header', '_Footer', '_Sidebar'], :force_downcase => false
     strip_html_tags.
-    convert_smart_punctuation.
     convert_accented_html_entities.
     convert_miscellaneous_html_entities.
-    convert_miscellaneous_characters.
     collapse.
     replace_whitespace.
     collapse("-").
@@ -243,7 +241,7 @@ module Precious
 
     post '/edit/*' do
       path      = '/' + clean_url(sanitize_empty_params(params[:path])).to_s
-      page_name = CGI.unescape(params[:page])
+      page_name = params[:page]
       wiki      = wiki_new
       page      = wiki.paged(page_name, path, exact = true)
       return if page.nil?
@@ -299,10 +297,10 @@ module Precious
       wiki = wiki_new
 
       begin
-        wiki.write_page(name.encode('utf-8'), format, params[:content], commit_message, path.encode('utf-8'))
+        wiki.write_page(name, format, params[:content], commit_message, path.encode('utf-8'))
 
         page_dir = settings.wiki_options[:page_file_dir].to_s
-        redirect to("/#{clean_url(::File.join(page_dir, path, name))}")
+        redirect to("/#{clean_url(encodeURIComponent(::File.join(page_dir, path, name)))}")
       rescue Gollum::DuplicatePageError => e
         @message = "Duplicate page: #{e.message}"
         mustache :error
