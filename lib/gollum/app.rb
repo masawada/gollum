@@ -23,7 +23,16 @@ class String
   # _Header => header which causes errors
   def to_url
     return nil if self.nil?
-    upstream_to_url :exclude => ['_Header', '_Footer', '_Sidebar'], :force_downcase => false
+#    upstream_to_url :exclude => ['_Header', '_Footer', '_Sidebar'], :force_downcase => false
+    strip_html_tags.
+    convert_smart_punctuation.
+    convert_accented_html_entities.
+    convert_miscellaneous_html_entities.
+    convert_miscellaneous_characters.
+    collapse.
+    replace_whitespace.
+    collapse("-").
+    encode("utf-8")
   end
 end
 
@@ -290,7 +299,7 @@ module Precious
       wiki = wiki_new
 
       begin
-        wiki.write_page(name, format, params[:content], commit_message, path)
+        wiki.write_page(name.encode('utf-8'), format, params[:content], commit_message, path.encode('utf-8'))
 
         page_dir = settings.wiki_options[:page_file_dir].to_s
         redirect to("/#{clean_url(::File.join(page_dir, path, name))}")
