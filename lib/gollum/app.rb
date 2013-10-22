@@ -462,7 +462,7 @@ module Precious
         @allow_uploads = wiki.allow_uploads
 
         mustache :page
-      elsif file = wiki.file(fullpath, wiki.ref, true)
+      elsif file = wiki.file([path, name].compact.join('/'), wiki.ref, true)
         if file.on_disk?
           send_file file.on_disk_path, :disposition => 'inline'
         else
