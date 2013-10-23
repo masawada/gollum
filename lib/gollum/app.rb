@@ -358,7 +358,7 @@ module Precious
         redirect to("/history/#{@file}")
       else
         redirect to("/compare/%s/%s...%s" % [
-          @file,
+          encodeURIComponent(@file),
           @versions.last,
           @versions.first]
         )
