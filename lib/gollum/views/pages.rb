@@ -1,3 +1,5 @@
+# coding: utf-8
+
 require "pathname"
 
 module Precious
@@ -12,14 +14,14 @@ module Precious
       def breadcrumb
         if @path
           path = Pathname.new(@path)
-          breadcrumb = [%{<a href="#{@base_url}/pages/">Home</a>}]
+          breadcrumb = [%{<a href="#{@base_url}/pages/">Home</a>}.force_encoding('utf-8')]
           path.descend do |crumb|
             title = crumb.basename
 
             if title == path.basename
               breadcrumb << title
             else
-              breadcrumb << %{<a href="#{@base_url}/pages/#{crumb}/">#{title}</a>}
+              breadcrumb << %{<a href="#{@base_url}/pages/#{crumb}/">#{title}</a>}.force_encoding('utf-8')
             end
           end
 
@@ -34,7 +36,7 @@ module Precious
           folder_links = []
 
           @results.map { |page|
-            page_path = page.path.sub(/^#{@path}\//,'')
+            page_path = page.path.force_encoding('utf-8').sub(/^#{@path}\//u,'')
 
             if page_path.include?('/')
               folder      = page_path.split('/').first
